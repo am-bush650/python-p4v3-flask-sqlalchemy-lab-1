@@ -14,7 +14,7 @@ app.json.compact = False
 migrate = Migrate(app, db)
 db.init_app(app)
 
-
+'''
 @app.route('/')
 def index():
     body = {'message': 'Flask SQLAlchemy Lab 1'}
@@ -25,3 +25,22 @@ def index():
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+'''
+
+@app.route('/earthquakes/<int:id>')
+def get_earthquake(id):
+    earthquake = Earthquake.query.get(id)
+    
+    if earthquake:
+        response_body = {
+            "id": earthquake.id,
+            "location": earthquake.location,
+            "magnitude": earthquake.magnitude,
+            "year": earthquake.year
+        }
+        status_code = 200
+    else:
+        response_body = {"message": f"Earthquake {id} not found."}
+        status_code = 404
+    
+    return make_response(response_body, status_code)
